@@ -1,0 +1,182 @@
+<div class="wh-container">
+  <aside class="sidebar">
+    <header class="sidebar-header">
+      <div class="brand">Chat Application</div>
+      <div class="actions">
+        <button
+          class="icon-btn"
+          aria-label="New chat"
+          (click)="showAddFriendPopup()"
+        >
+          ✚
+        </button>
+        <button class="icon-btn" aria-label="Menu">☰</button>
+      </div>
+    </header>
+
+    <div class="search">
+      <input
+        type="search"
+        placeholder="Ara veya yeni sohbet"
+        aria-label="Ara"
+        [(ngModel)]="searchText"
+        (ngModelChange)="filterItems()"
+      />
+    </div>
+
+    <!-- Sekmeler -->
+    <div class="tabs">
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'contacts'"
+        (click)="activeTab = 'contacts'"
+      >
+        Kişiler
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'requests'"
+        (click)="activeTab = 'requests'"
+      >
+        İstekler
+        <span *ngIf="pendingRequests.length" class="badge">{{
+          pendingRequests.length
+        }}</span>
+      </button>
+    </div>
+
+    <!-- Contacts -->
+    <nav class="contacts" *ngIf="activeTab === 'contacts'">
+      <div *ngFor="let contact of friends; let i = index">
+        <a
+          class="contact active"
+          [class.active]="activeIndex === i"
+          (click)="openChat(contact.username, i, contact.userId)"
+        >
+          <div
+            class="avatar-wrapper"
+            [ngClass]="contact.isOnline ? 'online' : 'offline'"
+          >
+            <div class="avatar">{{ contact.initials }}</div>
+
+            <span class="unread-count" *ngIf="contact.unreadCount > 0">{{
+              contact.unreadCount
+            }}</span>
+          </div>
+          <div class="meta">
+            <div class="name">{{ contact.username }}</div>
+            <div class="last" *ngIf="!contact.typing">
+              <ng-container *ngIf="contact.senderUserId === currentUser.userId"
+                >Siz:
+              </ng-container>
+              {{ contact.lastMessage }}
+            </div>
+            <div class="typing" *ngIf="contact.typing">yazıyor...</div>
+          </div>
+          <div class="time">{{ contact.time | chatDate }}</div>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Requests -->
+    <nav class="requests" *ngIf="activeTab === 'requests'">
+      <div *ngIf="pendingRequests.length === 0" class="empty">
+        Bekleyen istek yok.
+      </div>
+      <div class="request" *ngFor="let req of pendingRequests">
+        <div class="avatar small">{{ req.initials }}</div>
+        <div class="meta">
+          <div class="name">{{ req.senderUsername }}</div>
+          <div class="actions">
+            <button class="accept" (click)="acceptRequest(req)">
+              Kabul Et
+            </button>
+            <button class="reject" (click)="rejectRequest(req)">Reddet</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <footer class="sidebar-footer">
+      <strong> {{ currentUser.username }}</strong> olarak giriş yapıldı.
+
+      <button class="logout-btn" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i> Çıkış
+      </button>
+    </footer>
+  </aside>
+
+  <main class="chat-panel">
+    <!-- Welcome Screen -->
+    <div class="welcome" *ngIf="!selectedUser.username">
+      <h2>Chat Application'a Hoş Geldiniz</h2>
+      <p>
+        Başlamak için soldaki listeden bir sohbet seçin veya yeni bir kişi
+        ekleyin.
+      </p>
+    </div>
+
+    <!-- Chat Screen -->
+    <div *ngIf="selectedUser.username" class="chat-screen">
+      <header class="chat-header">
+        <div class="left">
+          <button
+            class="back-btn icon-btn"
+            aria-label="Geri"
+            (click)="closeChat()"
+          >
+            ←
+          </button>
+          <div class="avatar large">
+            {{ selectedUser.username[0].toUpperCase() }}
+          </div>
+          <div class="title">
+            <div class="name">{{ selectedUser.username }}</div>
+
+            <div class="status">{{ isOnlineUser() }}</div>
+          </div>
+        </div>
+        <div class="right">
+          <button class="icon-btn" aria-label="Menu">⋯</button>
+        </div>
+      </header>
+
+      <section class="messages" role="log" aria-live="polite">
+        <div class="date-sep">Bugün</div>
+        <ng-container *ngFor="let item of messages">
+          <div
+            class="message"
+            [ngClass]="
+              item.senderUserId === currentUser.userId ? 'sent' : 'received'
+            "
+          >
+            <div
+              class="bubble"
+              [ngClass]="{
+                unread: !item.isRead && item.senderUserId != currentUser.userId
+              }"
+            >
+              {{ item.content }}
+            </div>
+            <div class="msg-meta">{{ item.sentAt | chatDate }}</div>
+          </div>
+        </ng-container>
+      </section>
+
+      <!-- Mesaj gönderme inputu -->
+      <form class="composer" (submit)="$event.preventDefault()">
+        <!-- <button type="button" class="icon-btn">➕</button> -->
+        <input
+          type="text"
+          name="message"
+          placeholder="Mesaj yaz"
+          aria-label="Mesaj yaz"
+          [(ngModel)]="message"
+        />
+        <button type="submit" class="send-btn" (click)="sendMessage()">
+          🚀
+        </button>
+      </form>
+    </div>
+  </main>
+</div>

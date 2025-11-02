@@ -1,0 +1,14 @@
+
+<div class="auth-container">
+  <h2>{{ isRegisterMode ? 'Kayıt Ol' : 'Giriş Yap' }}</h2>
+
+  <input [(ngModel)]="username" placeholder="Username" (keyup.enter)="submit()">
+  <input [(ngModel)]="password" type="password" placeholder="Password" (keyup.enter)="submit()">
+
+  <button (click)="submit()">{{ isRegisterMode ? 'Kayıt Ol' : 'Giriş Yap' }}</button>
+  <p>
+    <a href="javascript:void(0)" (click)="toggleMode()">
+      {{ isRegisterMode ? 'Zaten bir hesabınız var mı? Giriş yapın' : 'Hesabınız yok mu? Kayıt olun' }}
+    </a>
+  </p>
+</div>

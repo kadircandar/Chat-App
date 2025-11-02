@@ -1,0 +1,79 @@
+/* Genel container */
+.auth-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  border-radius: 15px;
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Başlık */
+.auth-container h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Input alanları */
+.auth-container input {
+  width: 90%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.2);
+}
+
+/* Buton */
+.auth-container button {
+  width: 95%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #ff6a00;
+  background: linear-gradient(135deg, #ff6a00 0%, #ffb347 100%);
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.auth-container button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* Toggle link */
+.auth-container p a {
+  color: #ffd700;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-container p a:hover {
+  text-decoration: underline;
+}
+
+/* Mobil uyumlu */
+@media screen and (max-width: 480px) {
+  .auth-container {
+    margin: 20px;
+    padding: 25px 15px;
+  }
+  .auth-container h2 {
+    font-size: 24px;
+  }
+  .auth-container input, .auth-container button {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
